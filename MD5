@@ -1,0 +1,12 @@
+e7c2f9bdd39623dd91fe5b8e04d5c602 *DESCRIPTION
+aed97ffd6d7df935390e90225df31ef8 *NAMESPACE
+04c755a99d7da8790cd697b874aa228b *R/evaluate.R
+8b9ec4132f2f40a9771dea62b991eebb *R/initiate.R
+f4aac54dc5fceac5a8fda4149a577436 *R/package-docs.R
+9778f0bcc1262601d9cd8560aaa7c1dc *README.md
+d52d94b657a275aa605d1343565b8565 *man/MultiGHQuad-package.Rd
+92836532bd3875ec6121d915ab659c14 *man/eval.quad.Rd
+bca974531025e7c0fc85e88fc2dad2ca *man/init.quad.Rd
+78a6d9f824ab8f39b38839080240339d *tests/testthat.R
+a7b120abd19138c8a5293a11ce7568e4 *tests/testthat/test_evaluate.R
+62a88d03b1f459b93b38b5bc06f2066d *tests/testthat/test_generate_quadpoints.R
