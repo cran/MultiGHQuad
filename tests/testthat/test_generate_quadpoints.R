@@ -1,7 +1,5 @@
 library(MultiGHQuad)
-context("Quadrature points are generated correctly")
-
-fastGHQuad::gaussHermiteData(20)
+context("Quadrature points are generated reasonably")
 
 f.data <- fastGHQuad::gaussHermiteData(20)
 m.data <- init.quad(1, ip = 20, prune = FALSE)
@@ -12,6 +10,29 @@ test_that("Length and format", {
   expect_equal(length(m.data$W), 20)
   expect_equal(dim(m.data$X), c(20,1))
 })
+
+estimate <- c(1,2)
+attr(estimate, 'variance') <- diag(2)
+
+estimateb <- 1
+attr(estimateb, 'variance') <- diag(1)
+
+test_that("Adapt accepts previous estimate", {
+  expect_error(init.quad(1, adapt = estimate))
+  expect_is(init.quad(2, adapt = estimate), "list")
+  expect_error(init.quad(3, adapt = estimate))
+  expect_is(init.quad(1, adapt = estimateb), "list")
+  expect_error(init.quad(2, adapt = estimateb))
+})
+
+adapt <- list(mu = c(1,1), Sigma = diag(2))
+
+test_that("Adapt accepts list", {
+  expect_error(init.quad(1, adapt = adapt))
+  expect_is(init.quad(2, adapt = adapt), "list")
+  expect_error(init.quad(3, adapt = adapt))
+})
+
 
 test_that("Univariate Quad points match", {
   expect_equal(f.data$x, m.data$X[,1] / sqrt(2))
@@ -31,9 +52,9 @@ test_that("Sum of weights is 1, pruning does not take too much", {
       pruned <- exp(init.quad(q, ip = ip)$W)
       not.pruned <- exp(init.quad(q, ip = ip, prune = FALSE)$W)
       
-      expect_equal(sum(not.pruned), 1, info = paste("q", q, "ip", ip))
+      expect_equal(sum(not.pruned), 1, label = paste("q", q, "ip", ip))
       # loose no more than 2% of weights.
-      expect_less_than(1 - sum(not.pruned), .01, info = paste("q", q, "ip", ip))  
+      expect_lt(1 - sum(not.pruned), .01, label = paste("q", q, "ip", ip))  
     }
   }
 })
@@ -59,7 +80,7 @@ pos.def <- function(n, ev = runif(n, 0, 10))
 con <- c(1/10, 1/9.523810, 1/9.501188, 1/9.500059) # I'm having a brainfart. What is this?
 for (q in 2:4){
   x <- pos.def(q)
-  tol <- 1e-3     # this is numerical estimation, not rocket science. hehehehe, I made a funny.
+  tol <- 1e-3     # this is numerical estimation, not rocket science
   
   test_that("X transformed correctly", {
     expect_equal(cov(init.quad(q, prior = list(mu = rep(0,q), Sigma = diag(q)), ip = 20, prune = FALSE)$X / sqrt(2))*con[q], diag(q), tolerance = tol)

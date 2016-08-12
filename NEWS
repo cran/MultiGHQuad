@@ -1,0 +1,5 @@
+MultiGHQuad v1.2.0 (Release date: 2016-08-11)
+==============
+
+* CRITICAL: Fixed errors in eval.quad() pertaining to adaptation to intermediate results.
+* Added debug flag for init.quad(), provides a visual representation of the quadrature grid.
